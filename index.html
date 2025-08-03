@@ -790,7 +790,24 @@
             if (timeRange !== 'live' && allReadings.length > 0) {
                 const filteredData = getFilteredData();
                 if (filteredData.length > 0) {
-                    updateDashboard(filteredData[filteredData.length - 1]);
+                    // Calculate averages
+                    const avg = (arr, key) => arr.reduce((sum, r) => sum + (parseFloat(r[key]) || 0), 0) / arr.length;
+                    const avgData = {
+                        pvPower: avg(filteredData, 'pvPower'),
+                        solarVoltage: avg(filteredData, 'solarVoltage'),
+                        solarCurrent: avg(filteredData, 'solarCurrent'),
+                        batteryVoltage: avg(filteredData, 'batteryVoltage'),
+                        batteryLevel: avg(filteredData, 'batteryLevel'),
+                        batteryStatus: filteredData[filteredData.length - 1].batteryStatus, // or pick most common
+                        batteryPower: avg(filteredData, 'batteryPower'),
+                        loadWatts: avg(filteredData, 'loadWatts'),
+                        loadType: filteredData[filteredData.length - 1].loadType,
+                        loadEnabled: filteredData[filteredData.length - 1].loadEnabled,
+                        batteryTemp: avg(filteredData, 'batteryTemp'),
+                        inverterTemp: avg(filteredData, 'inverterTemp'),
+                        timestamp: filteredData[filteredData.length - 1].timestamp // show last update time
+                    };
+                    updateDashboard(avgData);
                 }
             }
             updateChart();
