@@ -614,10 +614,10 @@
                 return;
             }
 
-            const newState = !latestData?.loadEnabled;
-            database.ref('/control/shutdownLoad').set(!newState)
+            const shouldShutdown = latestData?.loadEnabled; // If currently enabled, we want to shut it down
+            database.ref('/control/shutdownLoad').set(shouldShutdown)
                 .then(() => {
-                    console.log(`Emergency toggle: Load ${newState ? 'enabled' : 'disabled'}`);
+                    console.log(`Emergency toggle: Setting shutdown to ${shouldShutdown}`);
                 })
                 .catch((error) => {
                     console.error('Error toggling emergency load:', error);
