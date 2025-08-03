@@ -401,10 +401,6 @@
                     <span class="metric-label">Power</span>
                     <span class="metric-value" id="batteryPower">-- W</span>
                 </div>
-                <div class="metric">
-                    <span class="metric-label">Temperature</span>
-                    <span class="metric-value" id="batteryTemp">-- °C</span>
-                </div>
             </div>
 
             <!-- Load Card -->
@@ -567,7 +563,6 @@
             document.getElementById('batteryLevel').textContent = `${data.batteryLevel?.toFixed(0) || '--'} %`;
             document.getElementById('batteryStatus').textContent = data.batteryStatus || '--';
             document.getElementById('batteryPower').textContent = `${data.batteryPower?.toFixed(1) || '--'} W`;
-            document.getElementById('batteryTemp').textContent = `${data.batteryTemp?.toFixed(1) || '--'} °C`;
 
             // Update battery progress bar
             const batteryProgress = document.getElementById('batteryProgress');
