@@ -1,41 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ESP32 Solar Monitor Dashboard</title>
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='14' fill='%23FFD600'/%3E%3Cg stroke='%23FFD600' stroke-width='4'%3E%3Cline x1='32' y1='4' x2='32' y2='16'/%3E%3Cline x1='32' y1='48' x2='32' y2='60'/%3E%3Cline x1='4' y1='32' x2='16' y2='32'/%3E%3Cline x1='48' y1='32' x2='60' y2='32'/%3E%3Cline x1='12.22' y1='12.22' x2='20.49' y2='20.49'/%3E%3Cline x1='43.51' y1='43.51' x2='51.78' y2='51.78'/%3E%3Cline x1='12.22' y1='51.78' x2='20.49' y2='43.51'/%3E%3Cline x1='43.51' y1='20.49' x2='51.78' y2='12.22'/%3E%3C/g%3E%3C/svg%3E">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             min-height: 100vh;
             color: #333;
         }
-        
+
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
         }
-        
+
         .header {
             text-align: center;
             margin-bottom: 30px;
             color: white;
         }
-        
+
         .header h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
-        
+
         .status-indicator {
             display: inline-block;
             width: 12px;
@@ -44,21 +47,34 @@
             margin-right: 8px;
             animation: pulse 2s infinite;
         }
-        
-        .status-connected { background-color: #4CAF50; }
-        .status-disconnected { background-color: #f44336; }
-        
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.6; }
-            100% { opacity: 1; }
+
+        .status-connected {
+            background-color: #4CAF50;
         }
-        
+
+        .status-disconnected {
+            background-color: #f44336;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
         .controls {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border-radius: 15px;
             padding: 20px;
@@ -66,7 +82,7 @@
             flex-wrap: wrap;
             gap: 15px;
         }
-        
+
         .emergency-toggle {
             background: linear-gradient(45deg, #ff4757, #ff6b7a);
             border: none;
@@ -79,110 +95,111 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
         }
-        
+
         .emergency-toggle:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4);
         }
-        
+
         .emergency-toggle.enabled {
             background: linear-gradient(45deg, #26de81, #20bf6b);
             box-shadow: 0 4px 15px rgba(38, 222, 129, 0.3);
         }
-        
+
         .emergency-toggle.enabled:hover {
             box-shadow: 0 6px 20px rgba(38, 222, 129, 0.4);
         }
-        
+
         .date-filter {
             display: flex;
             gap: 10px;
             align-items: center;
             flex-wrap: wrap;
         }
-        
-        .date-filter input, .date-filter select {
-            background: rgba(255,255,255,0.9);
+
+        .date-filter input,
+        .date-filter select {
+            background: rgba(255, 255, 255, 0.9);
             border: none;
             padding: 10px 15px;
             border-radius: 10px;
             font-size: 0.9rem;
         }
-        
+
         .date-filter button {
-            background: rgba(255,255,255,0.2);
-            border: 2px solid rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
             color: white;
             padding: 10px 20px;
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        
+
         .date-filter button:hover {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
         }
-        
+
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
         }
-        
+
         .card {
-            background: rgba(255,255,255,0.95);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             padding: 25px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             transition: transform 0.3s ease;
         }
-        
+
         .card:hover {
             transform: translateY(-5px);
         }
-        
+
         .card-header {
             display: flex;
             align-items: center;
             margin-bottom: 20px;
         }
-        
+
         .card-icon {
             font-size: 2rem;
             margin-right: 15px;
         }
-        
+
         .card-title {
             font-size: 1.3rem;
             font-weight: bold;
             color: #2c3e50;
         }
-        
+
         .metric {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 10px 0;
-            border-bottom: 1px solid rgba(0,0,0,0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
-        
+
         .metric:last-child {
             border-bottom: none;
         }
-        
+
         .metric-label {
             font-weight: 500;
             color: #555;
         }
-        
+
         .metric-value {
             font-weight: bold;
             font-size: 1.1rem;
         }
-        
+
         .alert {
             background: linear-gradient(45deg, #ff4757, #ff6b7a);
             color: white;
@@ -192,17 +209,27 @@
             display: none;
             animation: shake 0.5s ease-in-out;
         }
-        
+
         .alert.show {
             display: block;
         }
-        
+
         @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
         }
-        
+
         .progress-bar {
             width: 100%;
             height: 20px;
@@ -211,7 +238,7 @@
             overflow: hidden;
             margin: 10px 0;
         }
-        
+
         .progress-fill {
             height: 100%;
             background: linear-gradient(45deg, #26de81, #20bf6b);
@@ -219,59 +246,59 @@
             transition: width 0.5s ease;
             position: relative;
         }
-        
+
         .progress-fill.low {
             background: linear-gradient(45deg, #ff4757, #ff6b7a);
         }
-        
+
         .progress-fill.medium {
             background: linear-gradient(45deg, #ffa502, #ff9f43);
         }
-        
+
         .chart-container {
             grid-column: 1 / -1;
             height: 300px;
-            background: rgba(255,255,255,0.95);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             padding: 25px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
-        
+
         .timestamp {
             font-size: 0.9rem;
             color: #7f8c8d;
             text-align: center;
             margin-top: 20px;
         }
-        
+
         @media (max-width: 768px) {
             .container {
                 padding: 10px;
             }
-            
+
             .controls {
                 flex-direction: column;
                 text-align: center;
             }
-            
+
             .date-filter {
                 justify-content: center;
             }
-            
+
             .header h1 {
                 font-size: 2rem;
             }
         }
-        
+
         .loading {
             text-align: center;
             color: white;
             font-size: 1.2rem;
             margin: 50px 0;
         }
-        
+
         .spinner {
-            border: 4px solid rgba(255,255,255,0.3);
+            border: 4px solid rgba(255, 255, 255, 0.3);
             border-top: 4px solid white;
             border-radius: 50%;
             width: 40px;
@@ -279,13 +306,19 @@
             animation: spin 1s linear infinite;
             margin: 20px auto;
         }
-        
+
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
@@ -296,12 +329,12 @@
                 <span id="lastUpdate"></span>
             </p>
         </div>
-        
+
         <div class="controls">
             <button class="emergency-toggle" id="emergencyToggle" onclick="toggleEmergencyLoad()">
                 🔴 Load Disconnected
             </button>
-            
+
             <div class="date-filter">
                 <input type="date" id="filterDate" onchange="filterByDate()">
                 <select id="timeRange" onchange="filterByTimeRange()">
@@ -314,14 +347,14 @@
                 <button onclick="refreshData()">🔄 Refresh</button>
             </div>
         </div>
-        
+
         <div id="alertsContainer"></div>
-        
+
         <div class="loading" id="loadingIndicator">
             <div class="spinner"></div>
             Loading dashboard...
         </div>
-        
+
         <div class="grid" id="dataGrid" style="display: none;">
             <!-- Solar Panel Card -->
             <div class="card">
@@ -342,7 +375,7 @@
                     <span class="metric-value" id="solarCurrent">-- A</span>
                 </div>
             </div>
-            
+
             <!-- Battery Card -->
             <div class="card">
                 <div class="card-header">
@@ -373,7 +406,7 @@
                     <span class="metric-value" id="batteryTemp">-- °C</span>
                 </div>
             </div>
-            
+
             <!-- Load Card -->
             <div class="card">
                 <div class="card-header">
@@ -393,7 +426,7 @@
                     <span class="metric-value" id="loadEnabled">--</span>
                 </div>
             </div>
-            
+
             <!-- Temperature Card -->
             <div class="card">
                 <div class="card-header">
@@ -410,11 +443,11 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="chart-container" id="chartContainer" style="display: none;">
             <canvas id="powerChart" width="400" height="200"></canvas>
         </div>
-        
+
         <div class="timestamp" id="timestampDisplay"></div>
     </div>
 
@@ -442,7 +475,7 @@
         // Initialize dashboard
         function initDashboard() {
             console.log('Initializing dashboard...');
-            
+
             // Check if Firebase is loaded
             if (typeof firebase === 'undefined') {
                 console.error('Firebase SDK not loaded');
@@ -456,7 +489,7 @@
                 firebase.initializeApp(firebaseConfig);
                 database = firebase.database();
                 console.log('Firebase initialized successfully');
-                
+
                 setupRealtimeListener();
                 setupChart();
                 setInterval(updateConnectionStatus, 5000);
@@ -483,7 +516,7 @@
         // Setup real-time listener for latest data
         function setupRealtimeListener() {
             const readingsRef = database.ref('/readings');
-            
+
             readingsRef.limitToLast(1).on('child_added', (snapshot) => {
                 const data = snapshot.val();
                 latestData = data;
@@ -562,7 +595,7 @@
             // Update timestamp
             if (data.timestamp) {
                 const date = new Date(parseInt(data.timestamp));
-                document.getElementById('timestampDisplay').textContent = 
+                document.getElementById('timestampDisplay').textContent =
                     `Last updated: ${date.toLocaleString()}`;
             }
         }
@@ -720,8 +753,8 @@
         // Get filtered data based on current filter
         function getFilteredData() {
             const now = Date.now();
-            
-            switch(currentFilter) {
+
+            switch (currentFilter) {
                 case '1h':
                     return allReadings.filter(r => (now - parseInt(r.timestamp)) <= 3600000);
                 case '6h':
@@ -749,7 +782,7 @@
         function filterByTimeRange() {
             const timeRange = document.getElementById('timeRange').value;
             currentFilter = timeRange;
-            
+
             if (timeRange !== 'live' && allReadings.length > 0) {
                 const filteredData = getFilteredData();
                 if (filteredData.length > 0) {
@@ -765,7 +798,7 @@
             if (selectedDate) {
                 currentFilter = 'date';
                 document.getElementById('timeRange').value = 'all';
-                
+
                 const filteredData = getFilteredData();
                 if (filteredData.length > 0) {
                     updateDashboard(filteredData[filteredData.length - 1]);
@@ -785,4 +818,5 @@
         window.addEventListener('load', initDashboard);
     </script>
 </body>
+
 </html>
