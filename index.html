@@ -339,9 +339,13 @@
                 <input type="date" id="filterDate" onchange="filterByDate()">
                 <select id="timeRange" onchange="filterByTimeRange()">
                     <option value="live">Live Data</option>
+                    <option value="15m">Last 15 Minutes</option>
+                    <option value="30m">Last 30 Minutes</option>
                     <option value="1h">Last Hour</option>
+                    <option value="3h">Last 3 Hours</option>
                     <option value="6h">Last 6 Hours</option>
                     <option value="24h">Last 24 Hours</option>
+                    <option value="3d">Last 3 Days</option>
                     <option value="all">All Data</option>
                 </select>
                 <button onclick="refreshData()">🔄 Refresh</button>
@@ -759,12 +763,20 @@
             const now = Date.now();
 
             switch (currentFilter) {
+                case '15m':
+                    return allReadings.filter(r => (now - parseInt(r.timestamp)) <= 900000); // 15 min
+                case '30m':
+                    return allReadings.filter(r => (now - parseInt(r.timestamp)) <= 1800000); // 30 min
                 case '1h':
                     return allReadings.filter(r => (now - parseInt(r.timestamp)) <= 3600000);
+                case '3h':
+                    return allReadings.filter(r => (now - parseInt(r.timestamp)) <= 10800000); // 3 hours
                 case '6h':
                     return allReadings.filter(r => (now - parseInt(r.timestamp)) <= 21600000);
                 case '24h':
                     return allReadings.filter(r => (now - parseInt(r.timestamp)) <= 86400000);
+                case '3d':
+                    return allReadings.filter(r => (now - parseInt(r.timestamp)) <= 259200000); // 3 days
                 case 'date':
                     const selectedDate = document.getElementById('filterDate').value;
                     if (!selectedDate) return allReadings.slice(-20);
