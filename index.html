@@ -459,6 +459,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
     <script>
         // Firebase Configuration
@@ -494,9 +495,18 @@
                 database = firebase.database();
                 console.log('Firebase initialized successfully');
 
-                setupRealtimeListener();
-                setupChart();
-                setInterval(updateConnectionStatus, 5000);
+                // Sign in anonymously first
+                firebase.auth().signInAnonymously()
+                    .then(() => {
+                        console.log('Dashboard authenticated successfully');
+                        setupRealtimeListener();
+                        setupChart();
+                        setInterval(updateConnectionStatus, 5000);
+                    })
+                    .catch((error) => {
+                        console.error('Authentication failed:', error);
+                        showError(`Authentication failed: ${error.message}`);
+                    });
             } catch (error) {
                 console.error('Firebase initialization error:', error);
                 showError(`Firebase connection failed: ${error.message}`);
