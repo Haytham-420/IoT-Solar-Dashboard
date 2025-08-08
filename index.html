@@ -83,6 +83,12 @@
             gap: 15px;
         }
 
+        .emergency-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         .emergency-toggle {
             background: linear-gradient(45deg, #ff4757, #ff6b7a);
             border: none;
@@ -384,13 +390,14 @@
         </div>
 
         <div class="controls">
-            <button class="emergency-toggle" id="emergencyToggle" onclick="toggleEmergencyLoad()">
-                ❌ Load Disconnected
-            </button>
-            <span id="emergencySpinner" style="display:none;">
-                <span class="spinner"></span>
-            </span>
-
+            <div class="emergency-group">
+                <button class="emergency-toggle" id="emergencyToggle" onclick="toggleEmergencyLoad()">
+                    ❌ Load Disconnected
+                </button>
+                <span id="emergencySpinner" style="display:none;">
+                    <span class="spinner"></span>
+                </span>
+            </div>
             <div class="date-filter">
                 <input type="date" id="filterDate" onchange="filterByDate()">
                 <select id="timeRange" onchange="filterByTimeRange()">
