@@ -367,6 +367,9 @@
             <button class="emergency-toggle" id="emergencyToggle" onclick="toggleEmergencyLoad()">
                 ❌ Load Disconnected
             </button>
+            <span id="emergencySpinner" style="display:none;">
+                <span class="spinner"></span>
+            </span>
 
             <div class="date-filter">
                 <input type="date" id="filterDate" onchange="filterByDate()">
@@ -666,15 +669,15 @@
         // Toggle emergency load
         function toggleEmergencyLoad() {
             const toggleBtn = document.getElementById('emergencyToggle');
+            const spinner = document.getElementById('emergencySpinner');
             if (!isConnected) {
                 alert('Not connected to Firebase. Please check your connection.');
                 return;
             }
 
-            // Disable button and show spinner
+            // Disable button and show spinner next to it
             toggleBtn.disabled = true;
-            const originalText = toggleBtn.textContent;
-            toggleBtn.innerHTML = originalText + ' <span class="spinner"></span>';
+            spinner.style.display = 'inline-block';
 
             const shouldShutdown = latestData?.loadEnabled;
             database.ref('/control/shutdownLoad').set(shouldShutdown)
@@ -688,9 +691,9 @@
                 .finally(() => {
                     setTimeout(() => {
                         toggleBtn.disabled = false;
-                        toggleBtn.innerHTML = originalText;
+                        spinner.style.display = 'none';
                         updateEmergencyToggle(latestData?.loadEnabled); // Ensure correct state
-                    }, 3000);
+                    }, 2000);
                 });
         }
 
