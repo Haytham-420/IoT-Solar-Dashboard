@@ -16,7 +16,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: linear-gradient(135deg, #6a4fb3 0%, #8e6fdc 50%, #4b2e83 100%);
             min-height: 100vh;
             color: #333;
         }
@@ -36,7 +36,13 @@
         .header h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            color: #f3e8ff;
+            font-weight: 700;
+            text-shadow:
+                0 2px 12px #6a4fb3cc,
+                0 1px 0 #fff,
+                2px 2px 8px #0002;
+            letter-spacing: 1px;
         }
 
         .status-indicator {
@@ -103,8 +109,10 @@
         }
 
         .emergency-toggle:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4);
+            /* Remove transform and transition */
+            box-shadow: 0 10px 32px 0 rgba(255, 71, 87, 0.5), 0 2px 8px rgba(0, 0, 0, 0.08);
+            /* Optional: add a slight glow effect */
+            filter: drop-shadow(0 0 6px #ff6b7a88);
         }
 
         .emergency-toggle.enabled {
@@ -113,7 +121,8 @@
         }
 
         .emergency-toggle.enabled:hover {
-            box-shadow: 0 6px 20px rgba(38, 222, 129, 0.4);
+            box-shadow: 0 10px 32px 0 rgba(38, 222, 129, 0.5), 0 2px 8px rgba(0, 0, 0, 0.08);
+            filter: drop-shadow(0 0 6px #20bf6b88);
         }
 
         .emergency-toggle:disabled {
@@ -183,12 +192,12 @@
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 24px;
             padding: 25px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(130, 90, 200, 0.15);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(130, 90, 200, 0.12);
             transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -268,7 +277,7 @@
         .progress-bar {
             width: 100%;
             height: 20px;
-            background: #ecf0f1;
+            background: #b8b8b8;
             border-radius: 10px;
             overflow: hidden;
             margin: 10px 0;
@@ -301,7 +310,7 @@
 
         .timestamp {
             font-size: 0.9rem;
-            color: #7f8c8d;
+            color: #cacaca;
             text-align: center;
             margin-top: 20px;
         }
