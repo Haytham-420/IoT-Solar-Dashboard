@@ -110,6 +110,35 @@
             box-shadow: 0 6px 20px rgba(38, 222, 129, 0.4);
         }
 
+        .emergency-toggle:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            filter: grayscale(60%);
+            position: relative;
+        }
+
+        .emergency-toggle .spinner {
+            display: inline-block;
+            margin-left: 10px;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
         .date-filter {
             display: flex;
             gap: 10px;
@@ -336,7 +365,7 @@
 
         <div class="controls">
             <button class="emergency-toggle" id="emergencyToggle" onclick="toggleEmergencyLoad()">
-                🔴 Load Disconnected
+                ❌ Load Disconnected
             </button>
 
             <div class="date-filter">
@@ -636,12 +665,18 @@
 
         // Toggle emergency load
         function toggleEmergencyLoad() {
+            const toggleBtn = document.getElementById('emergencyToggle');
             if (!isConnected) {
                 alert('Not connected to Firebase. Please check your connection.');
                 return;
             }
 
-            const shouldShutdown = latestData?.loadEnabled; // If currently enabled, we want to shut it down
+            // Disable button and show spinner
+            toggleBtn.disabled = true;
+            const originalText = toggleBtn.textContent;
+            toggleBtn.innerHTML = originalText + ' <span class="spinner"></span>';
+
+            const shouldShutdown = latestData?.loadEnabled;
             database.ref('/control/shutdownLoad').set(shouldShutdown)
                 .then(() => {
                     console.log(`Emergency toggle: Setting shutdown to ${shouldShutdown}`);
@@ -649,6 +684,13 @@
                 .catch((error) => {
                     console.error('Error toggling emergency load:', error);
                     alert('Failed to toggle load. Please try again.');
+                })
+                .finally(() => {
+                    setTimeout(() => {
+                        toggleBtn.disabled = false;
+                        toggleBtn.innerHTML = originalText;
+                        updateEmergencyToggle(latestData?.loadEnabled); // Ensure correct state
+                    }, 3000);
                 });
         }
 
