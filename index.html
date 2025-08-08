@@ -16,9 +16,32 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #6a4fb3 0%, #8e6fdc 50%, #4b2e83 100%);
-            min-height: 100vh;
-            color: #333;
+            transition: background 0.4s, color 0.4s;
+        }
+
+        /* Light Theme (default) */
+        :root {
+            --main-bg: linear-gradient(135deg, #6a4fb3 0%, #8e6fdc 50%, #4b2e83 100%);
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-shadow: 0 8px 32px rgba(130, 90, 200, 0.15);
+            --text-main: #333;
+            --header-title: #f3e8ff;
+            --progress-bg: #b8b8b8;
+        }
+
+        /* Dark Theme */
+        body.dark-mode {
+            --main-bg: linear-gradient(135deg, #2d1846 0%, #3d246b 50%, #1a093e 100%);
+            --card-bg: rgba(30, 22, 54, 0.95);
+            --card-shadow: 0 8px 32px rgba(60, 30, 100, 0.25);
+            --text-main: #e0e0e0;
+            --header-title: #c7bfff;
+            --progress-bg: #444;
+        }
+
+        body {
+            background: var(--main-bg);
+            color: var(--text-main);
         }
 
         .container {
@@ -192,10 +215,10 @@
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.85);
+            background: var(--card-bg);
             border-radius: 24px;
             padding: 25px;
-            box-shadow: 0 8px 32px rgba(130, 90, 200, 0.15);
+            box-shadow: var(--card-shadow);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(130, 90, 200, 0.12);
             transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
@@ -222,21 +245,31 @@
             color: #2c3e50;
         }
 
+        body.dark-mode .card-title {
+            color: #e0d7ff;
+        }
+
         .metric {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 10px 0;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            border-bottom: 1.5px solid rgba(130, 90, 200, 0.25);
+            /* more pronounced for light */
         }
 
-        .metric:last-child {
-            border-bottom: none;
+        body.dark-mode .metric {
+            border-bottom: 1.5px solid rgba(220, 210, 255, 0.25);
+            /* subtle light line for dark */
         }
 
         .metric-label {
             font-weight: 500;
             color: #555;
+        }
+
+        body.dark-mode .metric-label {
+            color: #e0e0ff;
         }
 
         .metric-value {
@@ -277,7 +310,7 @@
         .progress-bar {
             width: 100%;
             height: 20px;
-            background: #b8b8b8;
+            background: var(--progress-bg);
             border-radius: 10px;
             overflow: hidden;
             margin: 10px 0;
@@ -301,11 +334,19 @@
 
         .chart-container {
             grid-column: 1 / -1;
-            height: 500px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            height: 350px;
+            background: rgba(245, 240, 255, 0.95);
+            /* soft lavender for light mode */
+            border-radius: 16px;
+            padding: 18px;
+            box-shadow: 0 4px 18px rgba(130, 90, 200, 0.10);
+            transition: background 0.4s;
+        }
+
+        body.dark-mode .chart-container {
+            background: rgba(44, 34, 64, 0.95);
+            /* deep purple for dark mode */
+            box-shadow: 0 4px 18px rgba(60, 30, 100, 0.18);
         }
 
         .timestamp {
@@ -383,6 +424,126 @@
             box-sizing: border-box;
             background: transparent;
             vertical-align: middle;
+        }
+
+        /* Theme styles */
+        :root {
+            --background-color: #121212;
+            --card-background: #1e1e1e;
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --primary-color: #bb86fc;
+            --secondary-color: #03dac6;
+            --error-color: #cf6679;
+            --warning-color: #ffb74d;
+            --info-color: #64b5f6;
+            --success-color: #81c784;
+        }
+
+        [data-theme='dark'] {
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        [data-theme='dark'] .card {
+            background-color: var(--card-background);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme='dark'] .metric-label {
+            color: var(--text-muted);
+        }
+
+        [data-theme='dark'] .alert {
+            background: linear-gradient(45deg, #cf6679, #ff8a80);
+        }
+
+        [data-theme='dark'] .status-connected {
+            background-color: #66bb6a;
+        }
+
+        [data-theme='dark'] .status-disconnected {
+            background-color: #ef5350;
+        }
+
+        [data-theme='dark'] .spinner {
+            border-top-color: #bb86fc;
+        }
+
+        [data-theme='dark'] #emergencySpinner .spinner {
+            border-top-color: #cf6679;
+        }
+
+        [data-theme='dark'] .btn-primary {
+            background-color: #bb86fc;
+            border-color: #bb86fc;
+        }
+
+        [data-theme='dark'] .btn-primary:hover {
+            background-color: #9b59b6;
+            border-color: #9b59b6;
+        }
+
+        [data-theme='dark'] .btn-secondary {
+            background-color: #03dac6;
+            border-color: #03dac6;
+        }
+
+        [data-theme='dark'] .btn-secondary:hover {
+            background-color: #03bfae;
+            border-color: #03bfae;
+        }
+
+        [data-theme='dark'] .btn-danger {
+            background-color: #ef5350;
+            border-color: #ef5350;
+        }
+
+        [data-theme='dark'] .btn-danger:hover {
+            background-color: #e53935;
+            border-color: #e53935;
+        }
+
+        [data-theme='dark'] .btn-warning {
+            background-color: #ffb74d;
+            border-color: #ffb74d;
+        }
+
+        [data-theme='dark'] .btn-warning:hover {
+            background-color: #ffa726;
+            border-color: #ffa726;
+        }
+
+        [data-theme='dark'] .btn-info {
+            background-color: #64b5f6;
+            border-color: #64b5f6;
+        }
+
+        [data-theme='dark'] .btn-info:hover {
+            background-color: #42a5f5;
+            border-color: #42a5f5;
+        }
+
+        [data-theme='dark'] .btn-success {
+            background-color: #81c784;
+            border-color: #81c784;
+        }
+
+        [data-theme='dark'] .btn-success:hover {
+            background-color: #66bb6a;
+            border-color: #66bb6a;
+        }
+
+        [data-theme='dark'] .toggle-theme {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        [data-theme='dark'] .toggle-theme:hover {
+            color: #bb86fc;
         }
     </style>
 </head>
@@ -521,6 +682,13 @@
         </div>
 
         <div class="timestamp" id="timestampDisplay"></div>
+
+        <div style="position: absolute; top: 20px; right: 30px;">
+            <button id="themeToggle" onclick="toggleTheme()"
+                style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">
+                🌙
+            </button>
+        </div>
     </div>
 
     <!-- Firebase SDK -->
@@ -776,6 +944,7 @@
         // Setup chart
         function setupChart() {
             const ctx = document.getElementById('powerChart').getContext('2d');
+            const isDark = document.body.classList.contains('dark-mode');
             powerChart = new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -783,48 +952,85 @@
                     datasets: [{
                         label: 'Solar Power (W)',
                         data: [],
-                        borderColor: 'rgba(255, 206, 84, 1)',
-                        backgroundColor: 'rgba(255, 206, 84, 0.2)',
+                        borderColor: isDark ? '#FFD600' : 'rgba(255, 206, 84, 1)',
+                        backgroundColor: isDark ? 'rgba(255, 214, 0, 0.2)' : 'rgba(255, 206, 84, 0.2)',
                         tension: 0.4
                     }, {
                         label: 'Load Power (W)',
                         data: [],
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: isDark ? '#26de81' : 'rgba(75, 192, 192, 1)',
+                        backgroundColor: isDark ? 'rgba(38, 222, 129, 0.2)' : 'rgba(75, 192, 192, 0.2)',
                         tension: 0.4
                     }, {
                         label: 'Battery Power (W)',
                         data: [],
-                        borderColor: 'rgba(153, 102, 255, 1)',
-                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                        borderColor: isDark ? '#bb86fc' : 'rgba(153, 102, 255, 1)',
+                        backgroundColor: isDark ? 'rgba(187, 134, 252, 0.2)' : 'rgba(153, 102, 255, 0.2)',
                         tension: 0.4
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: isDark ? '#e0e0e0' : '#333'
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Power Generation & Consumption Over Time',
+                            color: isDark ? '#e0e0e0' : '#333'
+                        },
+                        // Chart background color
+                        background: {
+                            color: isDark ? '#1a093e' : '#fff'
+                        }
+                    },
+                    layout: {
+                        padding: 20
+                    },
                     scales: {
                         y: {
                             beginAtZero: true,
                             title: {
                                 display: true,
-                                text: 'Power (W)'
+                                text: 'Power (W)',
+                                color: isDark ? '#e0e0e0' : '#333'
+                            },
+                            ticks: {
+                                color: isDark ? '#e0e0e0' : '#333'
+                            },
+                            grid: {
+                                color: isDark ? '#444' : '#eee'
                             }
                         },
                         x: {
                             title: {
                                 display: true,
-                                text: 'Time'
+                                text: 'Time',
+                                color: isDark ? '#e0e0e0' : '#333'
+                            },
+                            ticks: {
+                                color: isDark ? '#e0e0e0' : '#333'
+                            },
+                            grid: {
+                                color: isDark ? '#444' : '#eee'
                             }
                         }
-                    },
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: 'Power Generation & Consumption Over Time'
-                        }
                     }
-                }
+                },
+                plugins: [{
+                    beforeDraw: chart => {
+                        const ctx = chart.ctx;
+                        ctx.save();
+                        ctx.globalCompositeOperation = 'destination-over';
+                        ctx.fillStyle = isDark ? '#1a093e' : '#fff';
+                        ctx.fillRect(0, 0, chart.width, chart.height);
+                        ctx.restore();
+                    }
+                }]
             });
         }
 
@@ -942,8 +1148,40 @@
             location.reload();
         }
 
+        // Theme toggle
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.getElementById('themeToggle');
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                btn.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                btn.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+            // Recreate chart with new theme
+            if (powerChart) {
+                powerChart.destroy();
+                setupChart();
+                updateChart();
+            }
+        }
+
+        // Load theme from local storage
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
         // Initialize dashboard when page loads
-        window.addEventListener('load', initDashboard);
+        window.addEventListener('load', () => {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('themeToggle').textContent = '☀️';
+            }
+            initDashboard();
+        });
     </script>
 </body>
 
