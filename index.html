@@ -545,6 +545,21 @@
         [data-theme='dark'] .toggle-theme:hover {
             color: #bb86fc;
         }
+
+        .toggle-theme {
+            background: none;
+            border: none;
+            color: var(--header-title);
+            font-size: 1.7rem;
+            cursor: pointer;
+            margin-left: 10px;
+            margin-right: 10px;
+            transition: color 0.3s;
+        }
+
+        .toggle-theme:hover {
+            color: #bb86fc;
+        }
     </style>
 </head>
 
@@ -583,6 +598,9 @@
                 </select>
                 <button onclick="refreshData()">🔄 Refresh</button>
             </div>
+            <button id="themeToggle" onclick="toggleTheme()" class="toggle-theme">
+                🌙
+            </button>
         </div>
 
         <div id="alertsContainer"></div>
@@ -683,12 +701,6 @@
 
         <div class="timestamp" id="timestampDisplay"></div>
 
-        <div style="position: absolute; top: 20px; right: 30px;">
-            <button id="themeToggle" onclick="toggleTheme()"
-                style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">
-                🌙
-            </button>
-        </div>
     </div>
 
     <!-- Firebase SDK -->
