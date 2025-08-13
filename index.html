@@ -887,7 +887,7 @@
                 hours = hours % 12;
                 hours = hours ? hours : 12; // the hour '0' should be '12'
                 document.getElementById('timestampDisplay').textContent =
-                    `Last updated: ${day}/${month}/${year}, ${hours}:${minutes}:${seconds} ${ampm}`;
+                    `Last data: ${day}/${month}/${year}, ${hours}:${minutes}:${seconds} ${ampm}`;
             }
         }
 
@@ -965,7 +965,7 @@
                 if (latestData?.timestamp) {
                     const timeDiff = Date.now() - parseInt(latestData.timestamp);
                     const seconds = Math.floor(timeDiff / 1000);
-                    lastUpdate.textContent = ` • Last data: ${seconds}s ago`;
+                    lastUpdate.textContent = ` • Last Updated: ${seconds}s ago`;
                 }
             } else {
                 statusIndicator.className = 'status-indicator status-disconnected';
